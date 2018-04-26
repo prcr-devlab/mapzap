@@ -99,6 +99,8 @@ var app = {
       mapTypeIds.push(google.maps.MapTypeId[type]);
     }
     mapTypeIds.push("OSM");
+    mapTypeIds.push('Dark')
+    mapTypeIds.push("Toner");
 
     app.map = new google.maps.Map(document.getElementById("map"), {
       styles: [{
@@ -119,6 +121,16 @@ var app = {
       mapTypeId: app.urlParams.map ? app.urlParams.map : "roadmap",
     });
 
+    ///////////////////
+    // Dark Basemap //
+    /////////////////
+    app.map.mapTypes.set('Dark', new google.maps.StyledMapType(darkMatter, {
+      name: 'Dark'
+    }))
+
+    /////////////////////////
+    // OSM Mapnik Basemap //
+    ///////////////////////
     app.map.mapTypes.set("OSM", new google.maps.ImageMapType({
       getTileUrl: function(coord, zoom) {
         return "http://tile.openstreetmap.org/" + zoom + "/" + coord.x + "/" + coord.y + ".png";
@@ -133,11 +145,25 @@ var app = {
     OSMattribution.innerHTML = "<div class='text-center' style='margin-bottom: 15px; margin-right: -40px; color: white; text-shadow: black 0.1em 0.1em 0.2em'>© <a href='https://www.openstreetmap.org/copyright' target='_blank' style='color: white; text-decoration: none;'>OpenStreetMap contributors</a></div>";
     OSMattribution.style.display = "none";
     app.map.controls[google.maps.ControlPosition.BOTTOM_RIGHT].push(OSMattribution);
-
-    app.map.mapTypes.set('Dark', new google.maps.StyledMapType(darkMatter, {
-      name: 'Dark'
-    }))
-    mapTypeIds.push('Dark')
+    
+    ///////////////////////////
+    // Stamen Toner Basemap //
+    /////////////////////////
+    app.map.mapTypes.set("Toner", new google.maps.ImageMapType({
+      getTileUrl: function(coord, zoom) {
+        return "https://stamen-tiles-a.a.ssl.fastly.net/toner/" + zoom + "/" + coord.x + "/"+ coord.y + ".png";
+      },
+      tileSize: new google.maps.Size(256, 256),
+      name: "Toner",
+      maxZoom: 20
+    }));
+    
+    var tonerAttribution = document.createElement("div");
+    tonerAttribution.id = "tonerAttribution";
+    tonerAttribution.innerHTML = 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>';
+    tonerAttribution.style.display = "none";
+    app.map.controls[google.maps.ControlPosition.BOTTOM_RIGHT].push(tonerAttribution)
+    
 
     app.selectedFeature = new google.maps.Data({
       map: app.map,
