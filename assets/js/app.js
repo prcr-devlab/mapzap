@@ -144,7 +144,7 @@ var app = {
     OSMattribution.id = "OSMattribution";
     OSMattribution.innerHTML = "<div class='text-center' style='margin-bottom: 15px; margin-right: -40px; color: white; text-shadow: black 0.1em 0.1em 0.2em'>© <a href='https://www.openstreetmap.org/copyright' target='_blank' style='color: white; text-decoration: none;'>OpenStreetMap contributors</a></div>";
     OSMattribution.style.display = "none";
-    app.map.controls[google.maps.ControlPosition.BOTTOM_RIGHT].push(OSMattribution);
+    app.map.controls[google.maps.ControlPosition.BOTTOM].push(OSMattribution);
     
     ///////////////////////////
     // Stamen Toner Basemap //
@@ -160,9 +160,10 @@ var app = {
     
     var tonerAttribution = document.createElement("div");
     tonerAttribution.id = "tonerAttribution";
-    tonerAttribution.innerHTML = 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>';
+    tonerAttribution.innerHTML = "<div class='text-center' style='margin-bottom: 15px; margin-right: -40px; color: white; text-shadow: black 0.1em 0.1em 0.2em'>Map Tiles by <a href='http://stamen.com'>Stamen Design</a>,<a href='http://creativecommons.org/licenses/by/3.0'>CC BY 3.0</a> &mdash; Map data &copy; <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a></div>"
+    // tonerAttribution.innerHTML = 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>';
     tonerAttribution.style.display = "none";
-    app.map.controls[google.maps.ControlPosition.BOTTOM_RIGHT].push(tonerAttribution)
+    app.map.controls[google.maps.ControlPosition.BOTTOM].push(tonerAttribution)
     
 
     app.selectedFeature = new google.maps.Data({
@@ -201,6 +202,14 @@ var app = {
         $("#OSMattribution").show();
       } else {
         $("#OSMattribution").hide();
+      }
+    });
+
+    app.map.addListener("maptypeid_changed", function(event) {
+      if (app.map.getMapTypeId() == "Toner") {
+        $("#tonerAttribution").show();
+      } else {
+        $("#tonerAttribution").hide();
       }
     });
 
